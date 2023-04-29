@@ -1,7 +1,6 @@
 import numpy as np
 import pandas as pd
 import scipy.stats as ss
-import pickle
 from matplotlib import pyplot as plt 
 import sklearn   
 from tensorflow import keras
@@ -261,23 +260,12 @@ class CrossValidator():
         b = np.count_nonzero(values==0)
         print('%s 1:0 %d:%d %5.2f%%'%(label,a,b,100*a/(a+b)))
         
-    def save_model(self,filename1,filename2):
-        if self.model is not None:
-            filepath = MODEL_DIR + filename1
-            self.model.save(filepath)
-            print('Saved model 1 to',filepath)
-        if self.discriminator is not None:
-            filepath = MODEL_DIR + filename2
-            pickle.dump(self.discriminator, open(filepath, 'wb'))
-            print('Saved model 2 to',filepath)
-   
-    def load_model(self,filename1,filename2):
-        filepath = MODEL_DIR + filename1
-        self.model = keras.models.load_model(filepath)
-        print('Loaded model 1 from',filepath)
-        filepath = MODEL_DIR + filename2
-        self.discriminator = pickle.load(open(filepath, 'rb'))        
-        print('Loaded model 2 from',filepath)
+    def get_models(self):
+        return self.model, self.discriminator
+        
+    def set_models(self, model, discrim):
+        self.model = model
+        self.discriminator = discrim
         
     def train_new_model(self,train_ids,train_seq,train_rci,
             valid_ids=None,valid_seq=None,valid_rci=None):
