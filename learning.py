@@ -174,6 +174,7 @@ class CrossValidator():
         self.epochs = epochs
         self.discriminator = rci_threshold
         self.score_threshold = score_threshold
+        self.default_threshold = rci_threshold
         self.mechanism = 'ZERO'
         self.flip = False
         self.reset_statistics()
@@ -238,7 +239,7 @@ class CrossValidator():
         elif self.mechanism == 'THE_MEAN':
             self.discriminator = np.mean(rci_values)
         elif self.mechanism == 'ZERO':
-            self.discriminator = RCI_THRESHOLD_VALUE
+            self.discriminator = self.default_threshold # RCI_THRESHOLD_VALUE in notebooks
         else: # not expected
             self.discriminator = 0
     
@@ -392,7 +393,7 @@ class CrossValidator():
 
 class Separator():
     
-    def __init__(self):
+    def __init__(self,prefix='cv'):
         self.train_ids = []
         self.train_seq = []
         self.train_rci = dict()
@@ -400,6 +401,7 @@ class Separator():
         self.val_seq = []
         self.val_rci = dict()
         self.set_middle()
+        self.prefix = prefix
         
     def set_middle(self,ftest=False,ftailstest=False,fmiddletest=False,\
                    ftrain=False,ftailstrain=False,fmiddletrain=False,\
@@ -414,7 +416,12 @@ class Separator():
         self.middle_high = middlehigh
         
     def load(self,data_dir,rep,fold):
-        filename='cv.{}.{}.validation_genes.txt'.format(rep,fold)
+        if self.prefix=='cv':
+            # lncRNA genes were split into 2*5 validation rounds
+            filename='cv.{}.{}.validation_genes.txt'.format(rep,fold)
+        else:
+            # mRNA genes were split into 2*5 validation rounds
+            filename='pc.{}.{}.validation_genes.txt'.format(rep,fold)
         filename = data_dir + filename
         self.val_genes = set()
         print('Opening file',filename)
