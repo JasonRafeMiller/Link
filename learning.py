@@ -306,6 +306,7 @@ class CrossValidator():
         # For final test, do no train.
         # Assume set_sequences() set the test set.
         X_test,y_rci = self._get_X_y(test_ids,test_seq,test_rci) 
+        self._prepare_threshold(y_rci,False)  
         y_test = self._apply_threshold(y_rci)
         y_rci = None
         
@@ -416,12 +417,11 @@ class Separator():
         self.middle_high = middlehigh
         
     def load(self,data_dir,rep,fold):
-        if self.prefix=='cv':
-            # lncRNA genes were split into 2*5 validation rounds
-            filename='cv.{}.{}.validation_genes.txt'.format(rep,fold)
-        else:
-            # mRNA genes were split into 2*5 validation rounds
-            filename='pc.{}.{}.validation_genes.txt'.format(rep,fold)
+        pre = self.prefix
+        # pre=cv: lncRNA genes were split into 2*5 validation rounds
+        # pre=pc: mRNA genes were split into 2*5 validation rounds
+        # pre=h1: H1.hESC lncRNA genes were split into 2*5 validation rounds
+        filename='{}.{}.{}.validation_genes.txt'.format(pre,rep,fold)
         filename = data_dir + filename
         self.val_genes = set()
         print('Opening file',filename)
