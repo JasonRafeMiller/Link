@@ -15,6 +15,7 @@ Middle-exclusion, lncRNA, neural network.
 * MLP_YesYes: Regime B.
 * MLP_YesNo: Regime C.
 * MLP_NoYes3: Regime D.
+* Stats1: statistical significance
 
 ## Table 3. 
 Middle-exclusion, mRNA, neural network.
@@ -22,6 +23,7 @@ Middle-exclusion, mRNA, neural network.
 * MLP_mRNA_YesYes: Regime B.
 * MLP_mRNA_YesNo: Regime C.
 * MLP_mRNA_NoYes: Regime D.
+* Stats1: statistical significance
 
 ## Table 4. 
 Cross-validation and test results.
